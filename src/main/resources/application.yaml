@@ -10,3 +10,28 @@ management:
       exposure:
         include:
         - "*"
+
+#API_INTEGRACAO_PARCELAMENTO_ENDPOINT
+#API_INTEGRACAO_PARCELAMENTO_USERNAME
+#API_INTEGRACAO_PARCELAMENTO_PASSWORD
+#API_INTEGRACAO_PARCELAMENTO_TIMEOUT
+#API_INTEGRACAO_PARCELAMENTO_RETRY_MAX_ATTEMPTS
+#API_INTEGRACAO_PARCELAMENTO_RETRY_WAIT_DURATION
+
+api:
+  intermittent:
+    endpoint: http://localhost:8080
+    username: xxxxxxxxxxx
+    password: xxxxxxxxxxx
+    timeout: 800
+    retry:
+      max: 5
+      interval: 100
+      
+      
+#api.intermittent.endpoint
+#api.intermittent.username
+#api.intermittent.password
+#api.intermittent.timeout
+#api.intermittent.retry.max
+#api.intermittent.retry.interval      

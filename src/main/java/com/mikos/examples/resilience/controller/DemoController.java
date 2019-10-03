@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mikos.examples.resilience.model.Status;
-import com.mikos.examples.resilience.service.DemoService;
+import com.mikos.examples.resilience.service.IntermittentService;
+import com.mikos.examples.resilience.service.WebFluxService;
 
 import reactor.core.publisher.Mono;
 
@@ -13,14 +14,25 @@ import reactor.core.publisher.Mono;
 public class DemoController {
 
 	@Autowired
-	private final DemoService demoService;
+	private final WebFluxService webFluxService;
+	
+	@Autowired
+	private final IntermittentService intermittentService;
+	
 
-	public DemoController(DemoService demoService) {
-		this.demoService = demoService;
+	public DemoController(WebFluxService webFluxService, IntermittentService intermittentService) {
+		this.webFluxService = webFluxService;
+		this.intermittentService = intermittentService;
 	}
 
 	@GetMapping("/get")
 	public Mono<Status> get() {
-		return demoService.get();
+		return webFluxService.get();
 	}
+	
+	@GetMapping("/intermittent")
+	public Mono<Status> getIntermittent() {
+		return intermittentService.get();
+	}
+	
 }
