@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mikos.examples</groupId>
-	<artifactId>mikos-resilience4j-retry</artifactId>
+	<artifactId>mikos-resilience</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>mikos-resilience4j-retry</name>
+	<name>mikos-resilience</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
