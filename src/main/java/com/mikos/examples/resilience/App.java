@@ -1,13 +1,13 @@
-package com.mikos.examples.mikosresilience4jretry;
+package com.mikos.examples.resilience;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MikosResilience4jRetryApplication {
+public class App {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MikosResilience4jRetryApplication.class, args);
+		SpringApplication.run(App.class, args);
 	}
 
 }

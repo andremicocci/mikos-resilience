@@ -1,4 +1,4 @@
-package com.mikos.examples.mikosresilience4jretry.model;
+package com.mikos.examples.resilience.model;
 
 public class Status {
 
