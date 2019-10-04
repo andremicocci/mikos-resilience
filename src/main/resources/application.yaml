@@ -1,9 +1,4 @@
-resilience4j:
-  retry:
-    instances:
-      backendA:
-        max-retry-attempts: 3
-        wait-duration: 5000
+#### MANAGEMENT#################################################################################
 management:
   endpoints:
     web:
@@ -11,27 +6,67 @@ management:
         include:
         - "*"
 
+#### WEBFLUX ###################################################################################
+api:
+  intermittent:
+    endpoint: http://localhost:8080
+    username: xxxxxxxxxxx
+    password: xxxxxxxxxxx
+    timeout: 50
+    retry:
+      max: 5
+      interval: 100
+      
 #API_INTEGRACAO_PARCELAMENTO_ENDPOINT
 #API_INTEGRACAO_PARCELAMENTO_USERNAME
 #API_INTEGRACAO_PARCELAMENTO_PASSWORD
 #API_INTEGRACAO_PARCELAMENTO_TIMEOUT
 #API_INTEGRACAO_PARCELAMENTO_RETRY_MAX_ATTEMPTS
 #API_INTEGRACAO_PARCELAMENTO_RETRY_WAIT_DURATION
-
-api:
-  intermittent:
-    endpoint: http://localhost:8080
-    username: xxxxxxxxxxx
-    password: xxxxxxxxxxx
-    timeout: 800
-    retry:
-      max: 5
-      interval: 100
-      
       
 #api.intermittent.endpoint
 #api.intermittent.username
 #api.intermittent.password
 #api.intermittent.timeout
 #api.intermittent.retry.max
-#api.intermittent.retry.interval      
+#api.intermittent.retry.interval
+
+
+#### RESILIENCE4J ###############################################################################
+resilience4j.circuitbreaker:
+    instances:
+        backendA:
+            registerHealthIndicator: true
+            slidingWindowSize: 100
+        backendB:
+            registerHealthIndicator: true
+            slidingWindowSize: 10
+            permittedNumberOfCallsInHalfOpenState: 3
+            slidingWindowType: TIME_BASED
+            minimumNumberOfCalls: 20
+            waitDurationInOpenState: 50s
+            failureRateThreshold: 50
+            eventConsumerBufferSize: 10
+#            recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
+            
+resilience4j.retry:
+    instances:
+        backendA:
+            maxRetryAttempts: 3
+            waitDuration: 10s
+#            enableExponentialBackoff: true
+#            exponentialBackoffMultiplier: 2
+#            retryExceptions:
+#                - org.springframework.web.client.HttpServerErrorException
+#                - java.io.IOException
+#            ignoreExceptions:
+#                - io.github.robwin.exception.BusinessException
+        backendB:
+            maxRetryAttempts: 3
+            waitDuration: 10s
+#           retryExceptions:
+#               - org.springframework.web.client.HttpServerErrorException
+#               - java.io.IOException
+#            ignoreExceptions:
+#                - io.github.robwin.exception.BusinessException
+
