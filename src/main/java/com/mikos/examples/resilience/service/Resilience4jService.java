@@ -53,8 +53,12 @@ public class Resilience4jService {
 
 	}
 
-	private Mono<Status> fallback(IllegalArgumentException e) {
-		return Mono.just(new Status("DOWN","Fallback"));
+	private Mono<Status> fallback(org.springframework.web.client.HttpServerErrorException e) {
+		return Mono.just(new Status("DOWN","Fallback - HttpServerErrorException"));
+	}
+
+	private Mono<Status> fallback(org.springframework.web.reactive.function.client.WebClientResponseException e) {
+		return Mono.just(new Status("DOWN","Fallback - WebClientResponseException"));
 	}
 
 	private Mono<Status> fallback(RuntimeException e) {
