@@ -39,12 +39,27 @@ resilience4j:
       backendA:
         ring-buffer-size-in-closed-state: 6
         ring-buffer-size-in-half-open-state: 3
-        wait-duration-in-open-state: 5000
+        wait-duration-in-open-state: 60s
         failure-rate-threshold: 50
         event-consumer-buffer-size: 20
   retry:
+    configs:
+      default:
+        max-retry-attempts: 3
+        wait-duration: 100ms
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2        
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.io.IOException
+          - java.lang.reflect.InvocationTargetException
+        ignore-exceptions:
+          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
+#          - io.github.robwin.exception.BusinessException
     instances:
       backendA:
+        base-config: default
         max-retry-attempts: 3
-        wait-duration: 10000
+        
+        
         

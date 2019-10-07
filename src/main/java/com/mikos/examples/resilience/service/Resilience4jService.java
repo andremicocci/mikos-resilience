@@ -11,9 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.mikos.examples.resilience.model.Status;
 
-import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import reactor.core.publisher.Mono;
 
@@ -36,10 +35,10 @@ public class Resilience4jService {
 				.build();
 	}	
 	
-	@CircuitBreaker(name = "backendA", fallbackMethod = "fallback")
-	@RateLimiter(name = "backendA")
-	@Bulkhead(name = "backendA")
-	@Retry(name = "backendA", fallbackMethod = "fallback")
+	@Retry(name = "backendA", fallbackMethod = "fallback_Retry")
+	@CircuitBreaker(name = "backendA", fallbackMethod = "fallback_CB")
+//	@RateLimiter(name = "backendA")
+//	@Bulkhead(name = "backendA")
 	public Mono<Status> get() {
 		LOGGER.debug("Resilience4jService.get......");
 		
@@ -53,15 +52,23 @@ public class Resilience4jService {
 
 	}
 
-	private Mono<Status> fallback(org.springframework.web.client.HttpServerErrorException e) {
-		return Mono.just(new Status("DOWN","Fallback - HttpServerErrorException"));
+//	public Mono<Status> get() {
+//		io.github.resilience4j.circuitbreaker.CircuitBreaker circuitBreaker = io.github.resilience4j.circuitbreaker.CircuitBreaker.ofDefaults("backendA");
+//		io.github.resilience4j.retry.Retry retry = io.github.resilience4j.retry.Retry.ofDefaults("backendA");
+//		
+//		return Mono.fromCallable(this::get2)
+////			.compose(CircuitBreakerOperator.of(circuitBreaker))
+//			.compose(RetryOperator.of(retry))
+//			.block();
+//	}
+
+	private Mono<Status> fallback_Retry(RuntimeException e) {
+		return Mono.just(new Status("DOWN","Fallback Retry"));
 	}
 
-	private Mono<Status> fallback(org.springframework.web.reactive.function.client.WebClientResponseException e) {
-		return Mono.just(new Status("DOWN","Fallback - WebClientResponseException"));
+	private Mono<Status> fallback_CB(org.springframework.web.reactive.function.client.WebClientResponseException e) {
+		throw new RuntimeException("banana");
+		//return Mono.just(new Status("DOWN","Fallback Circuit Breaker"));
 	}
-
-	private Mono<Status> fallback(RuntimeException e) {
-		return Mono.just(new Status("DOWN","Fallback"));
-	}
+	
 }
